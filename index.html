@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Player</title>
+<title>Player HLS</title>
 <style>
     body { margin: 0; background: #000; }
     video { width: 100%; height: auto; background: #000; }
@@ -10,9 +10,21 @@
 </head>
 <body>
 
-<video controls autoplay>
-    <source src="https://muc001.myturn1.top:8088/live/fghghb444gh/playlist.m3u8?vidictid=207034169729&id=124353&pk=7c439d5fbaf0334ee901781e0ea1bfe0c3b8b9ede19dccb84cd1892766e4a6d3" type="application/x-mpegURL">
-</video>
+<video id="video" controls autoplay></video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+    var video = document.getElementById('video');
+    var url = "https://muc001.myturn1.top:8088/live/fghghb444gh/playlist.m3u8?vidictid=207034169729&id=124353&pk=7c439d5fbaf0334ee901781e0ea1bfe0c3b8b9ede19dccb84cd1892766e4a6d3";
+
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+    } else {
+        video.src = url;
+    }
+</script>
 
 </body>
 </html>
