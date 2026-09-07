@@ -4,38 +4,28 @@
 <meta charset="UTF-8">
 <title>Player Moderno</title>
 
-<!-- Plyr CSS (controles modernos) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css" />
 
 <style>
     body { margin: 0; background: #000; }
-    .plyr__video-embed, video { width: 100%; height: auto; }
+    video { width: 100%; height: auto; background: #000; }
 </style>
 </head>
 <body>
 
-<video id="player" controls playsinline></video>
+<video id="player" playsinline></video>
 
-<!-- hls.js para reproducir HLS -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<!-- Plyr JS (controles modernos) -->
 <script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
 
 <script>
     const video = document.getElementById('player');
     const source = "https://muc001.myturn1.top:8088/live/fghghb444gh/playlist.m3u8?vidictid=207034169729&id=124353&pk=7c439d5fbaf0334ee901781e0ea1bfe0c3b8b9ede19dccb84cd1892766e4a6d3";
 
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(source);
-        hls.attachMedia(video);
-    } else {
-        video.src = source;
-    }
-
-    // Inicializar Plyr (controles modernos)
+    // Inicializar Plyr con AUTOSTART
     const player = new Plyr('#player', {
+        autoplay: true,
+        muted: true,        // Android WebView exige mute para autoplay
         controls: [
             'play-large',
             'play',
@@ -51,6 +41,23 @@
         settings: ['quality', 'speed'],
         speed: { selected: 1, options: [0.5, 1, 1.5, 2] }
     });
+
+    // Cargar HLS
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(source);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.muted = true;   // requerido para autoplay en WebView
+            video.play();
+        });
+
+    } else {
+        video.src = source;
+        video.muted = true;
+        video.play();
+    }
 </script>
 
 </body>
