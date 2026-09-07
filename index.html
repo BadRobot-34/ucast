@@ -7,13 +7,37 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css" />
 
 <style>
-    body { margin: 0; background: #000; }
-    video { width: 100%; height: auto; background: #000; }
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #player-container {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Esto hace que el video llene la pantalla */
+        background: #000;
+    }
 </style>
 </head>
 <body>
 
-<video id="player" playsinline></video>
+<div id="player-container">
+    <video id="player" playsinline></video>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
@@ -25,7 +49,8 @@
     // Inicializar Plyr con AUTOSTART
     const player = new Plyr('#player', {
         autoplay: true,
-        muted: true,        // Android WebView exige mute para autoplay
+        muted: true,
+        fullscreen: { enabled: true },
         controls: [
             'play-large',
             'play',
@@ -49,7 +74,7 @@
         hls.attachMedia(video);
 
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.muted = true;   // requerido para autoplay en WebView
+            video.muted = true;
             video.play();
         });
 
