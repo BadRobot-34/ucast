@@ -17,18 +17,18 @@
     }
 
     #player-container {
-        width: 100%;
-        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         background: #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     video {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Esto hace que el video llene la pantalla */
+        object-fit: cover; /* llena la pantalla desde el inicio */
         background: #000;
     }
 </style>
@@ -46,10 +46,10 @@
     const video = document.getElementById('player');
     const source = "https://muc001.myturn1.top:8088/live/fghghb444gh/playlist.m3u8?vidictid=207034169729&id=124353&pk=7c439d5fbaf0334ee901781e0ea1bfe0c3b8b9ede19dccb84cd1892766e4a6d3";
 
-    // Inicializar Plyr con AUTOSTART
+    // Inicializar Plyr
     const player = new Plyr('#player', {
         autoplay: true,
-        muted: true,
+        muted: true,  // requerido para autoplay en WebView
         fullscreen: { enabled: true },
         controls: [
             'play-large',
@@ -63,7 +63,7 @@
             'settings',
             'fullscreen'
         ],
-        settings: ['quality', 'speed'],
+        settings: ['speed'],
         speed: { selected: 1, options: [0.5, 1, 1.5, 2] }
     });
 
@@ -73,15 +73,20 @@
         hls.loadSource(source);
         hls.attachMedia(video);
 
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.muted = true;
-            video.play();
+        // Cuando el stream empieza → activar sonido
+        hls.on(Hls.Events.LEVEL_LOADED, function () {
+            setTimeout(() => {
+                video.muted = false;   // activar sonido
+                video.play();          // reproducir con sonido
+            }, 300); // pequeño delay para evitar bloqueo del WebView
         });
 
     } else {
         video.src = source;
-        video.muted = true;
-        video.play();
+        setTimeout(() => {
+            video.muted = false;
+            video.play();
+        }, 300);
     }
 </script>
 
