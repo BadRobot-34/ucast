@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Hucaster Fullscreen</title>
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #player-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+</style>
+</head>
+<body>
+
+<div id="player-container">
+    <iframe id="playerFrame" allow="autoplay; fullscreen"></iframe>
+</div>
+
+<script type="text/javascript">
+    // Variables EXACTAS como tu script original
+    var width = 720;
+    var height = 480;
+    var channel = 'fghghb444gh';
+    var g = '1';
+
+    // URL del reproductor Hucaster
+    var playerUrl = "https://new.goagain.top/hembedplayer/" + channel + "/" + g + "/" + width + "/" + height;
+
+    // Insertar el iframe a pantalla completa
+    const frame = document.getElementById("playerFrame");
+    frame.src = playerUrl;
+
+    // Intento de activar sonido automáticamente
+    frame.addEventListener("load", function () {
+        try {
+            // Enviar comando al reproductor interno
+            frame.contentWindow.postMessage({ action: "unmute" }, "*");
+
+            // Segundo intento (algunos reproductores lo requieren)
+            setTimeout(() => {
+                frame.contentWindow.postMessage({ action: "unmute" }, "*");
+            }, 500);
+
+        } catch (e) {
+            console.log("No se pudo activar sonido automáticamente");
+        }
+    });
+</script>
+
+</body>
+</html>
