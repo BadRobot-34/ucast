@@ -44,27 +44,12 @@
     var g = '1';
 
     // URL del reproductor Hucaster
-    var playerUrl = "https://new.goagain.top/hembedplayer/" + channel + "/" + g + "/" + width + "/" + height;
+    var playerUrl = "https://new.goagain.top/hembedplayer/" 
+                    + channel + "/" + g + "/" + width + "/" + height;
 
     // Insertar el iframe a pantalla completa
     const frame = document.getElementById("playerFrame");
     frame.src = playerUrl;
-
-    // Intento de activar sonido automáticamente
-    frame.addEventListener("load", function () {
-        try {
-            // Enviar comando al reproductor interno
-            frame.contentWindow.postMessage({ action: "unmute" }, "*");
-
-            // Segundo intento (algunos reproductores lo requieren)
-            setTimeout(() => {
-                frame.contentWindow.postMessage({ action: "unmute" }, "*");
-            }, 500);
-
-        } catch (e) {
-            console.log("No se pudo activar sonido automáticamente");
-        }
-    });
 </script>
 
 </body>
